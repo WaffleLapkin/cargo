@@ -259,5 +259,8 @@ all-static = [
 workspace = true
 
 [patch.crates-io]
-bytes = { path = '../../../bytes-1.5.2' }
+bytes = { path = '../../../bytes-1.5.0' }
+miniz_oxide = { path = '../../../miniz_oxide-0.7.2' }
+crossbeam-utils = { path = '../../../crossbeam-utils-0.8.19' }
 der = { path = '../../../der-0.7.8' }
+ct-codecs = { path = '../../../ct-codecs-1.1.1' }

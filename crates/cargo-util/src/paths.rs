@@ -198,11 +198,7 @@ pub fn write_atomic<P: AsRef<Path>, C: AsRef<[u8]>>(path: P, contents: C) -> Res
 pub fn write_if_changed<P: AsRef<Path>, C: AsRef<[u8]>>(path: P, contents: C) -> Result<()> {
     (|| -> Result<()> {
         let contents = contents.as_ref();
-        let mut f = OpenOptions::new()
-            .read(true)
-            .write(true)
-            .create(true)
-            .open(&path)?;
+        let mut f = OpenOptions::new().read(true).write(true).create(true).open(&path)?;
         let mut orig = Vec::new();
         f.read_to_end(&mut orig)?;
         if orig != contents {
@@ -220,11 +216,7 @@ pub fn write_if_changed<P: AsRef<Path>, C: AsRef<[u8]>>(path: P, contents: C) ->
 /// contents.
 pub fn append(path: &Path, contents: &[u8]) -> Result<()> {
     (|| -> Result<()> {
-        let mut f = OpenOptions::new()
-            .write(true)
-            .append(true)
-            .create(true)
-            .open(path)?;
+        let mut f = OpenOptions::new().write(true).append(true).create(true).open(path)?;
 
         f.write_all(contents)?;
         Ok(())
@@ -338,10 +330,7 @@ pub fn set_invocation_time(path: &Path) -> Result<FileTime> {
     // note that if `FileTime::from_system_time(SystemTime::now());` is determined to be sufficient,
     // then this can be removed.
     let timestamp = path.join("invoked.timestamp");
-    write(
-        &timestamp,
-        "This file has an mtime of when this was started.",
-    )?;
+    write(&timestamp, "This file has an mtime of when this was started.")?;
     let ft = mtime(&timestamp)?;
     tracing::debug!("invocation time for {:?} is {}", path, ft);
     Ok(ft)
@@ -358,10 +347,7 @@ pub fn path2bytes(path: &Path) -> Result<&[u8]> {
     {
         match path.as_os_str().to_str() {
             Some(s) => Ok(s.as_bytes()),
-            None => Err(anyhow::format_err!(
-                "invalid non-unicode path: {}",
-                path.display()
-            )),
+            None => Err(anyhow::format_err!("invalid non-unicode path: {}", path.display())),
         }
     }
 }
@@ -464,9 +450,8 @@ fn _remove_dir_all(p: &Path) -> Result<()> {
     if symlink_metadata(p)?.is_symlink() {
         return remove_file(p);
     }
-    let entries = p
-        .read_dir()
-        .with_context(|| format!("failed to read directory `{}`", p.display()))?;
+    let entries =
+        p.read_dir().with_context(|| format!("failed to read directory `{}`", p.display()))?;
     for entry in entries {
         let entry = entry?;
         let path = entry.path();
@@ -510,8 +495,7 @@ fn _remove_file(p: &Path) -> Result<()> {
         }
     }
 
-    Err(err).with_context(|| format!("failed to remove file `{}`", p.display()))?;
-    Ok(())
+    Err(err).with_context(|| format!("failed to remove file `{}`", p.display()))
 }
 
 fn set_not_readonly(p: &Path) -> io::Result<bool> {
@@ -560,11 +544,7 @@ fn _link_or_copy(src: &Path, dst: &Path) -> Result<()> {
         use std::os::windows::fs::symlink_dir as symlink;
 
         let dst_dir = dst.parent().unwrap();
-        let src = if src.starts_with(dst_dir) {
-            src.strip_prefix(dst_dir).unwrap()
-        } else {
-            src
-        };
+        let src = if src.starts_with(dst_dir) { src.strip_prefix(dst_dir).unwrap() } else { src };
         symlink(src, dst)
     } else if env::var_os("__CARGO_COPY_DONT_LINK_DO_NOT_USE_THIS").is_some() {
         // This is a work-around for a bug in macOS 10.15. When running on
@@ -597,11 +577,7 @@ fn _link_or_copy(src: &Path, dst: &Path) -> Result<()> {
             fs::copy(src, dst).map(|_| ())
         })
         .with_context(|| {
-            format!(
-                "failed to link or copy `{}` to `{}`",
-                src.display(),
-                dst.display()
-            )
+            format!("failed to link or copy `{}` to `{}`", src.display(), dst.display())
         })?;
     Ok(())
 }
@@ -625,12 +601,7 @@ pub fn set_file_time_no_err<P: AsRef<Path>>(path: P, time: FileTime) {
     let path = path.as_ref();
     match filetime::set_file_times(path, time, time) {
         Ok(()) => tracing::debug!("set file mtime {} to {}", path.display(), time),
-        Err(e) => tracing::warn!(
-            "could not set mtime of {} to {}: {:?}",
-            path.display(),
-            time,
-            e
-        ),
+        Err(e) => tracing::warn!("could not set mtime of {} to {}: {:?}", path.display(), time, e),
     }
 }
 
