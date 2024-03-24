@@ -1,11 +1,6 @@
 [workspace]
 resolver = "2"
-members = [
-  "crates/*",
-  "credential/*",
-  "benches/benchsuite",
-  "benches/capture",
-]
+members = ["crates/*", "credential/*", "benches/benchsuite", "benches/capture"]
 exclude = [
   "target/", # exclude bench testing
 ]
@@ -73,7 +68,9 @@ pathdiff = "0.2"
 percent-encoding = "2.3"
 pkg-config = "0.3.30"
 proptest = "1.4.0"
-pulldown-cmark = { version = "0.10.0", default-features = false, features = ["html"] }
+pulldown-cmark = { version = "0.10.0", default-features = false, features = [
+  "html",
+] }
 rand = "0.8.5"
 regex = "1.10.3"
 rusqlite = { version = "0.31.0", features = ["bundled"] }
@@ -251,7 +248,16 @@ doc = false
 vendored-openssl = ["openssl/vendored"]
 vendored-libgit2 = ["libgit2-sys/vendored"]
 # This is primarily used by rust-lang/rust distributing cargo the executable.
-all-static = ['vendored-openssl', 'curl/static-curl', 'curl/force-system-lib-on-osx', 'vendored-libgit2']
+all-static = [
+  'vendored-openssl',
+  'curl/static-curl',
+  'curl/force-system-lib-on-osx',
+  'vendored-libgit2',
+]
 
 [lints]
 workspace = true
+
+[patch.crates-io]
+bytes = { path = '../../../bytes-1.5.2' }
+der = { path = '../../../der-0.7.8' }

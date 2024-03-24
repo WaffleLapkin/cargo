@@ -4027,3 +4027,15 @@ name = "zeroize"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "525b4ec142c6b68a2d10f01f7bbf6755599ca3f81ea53b8431b7dd348f5fdb2d"
+
+[[patch.unused]]
+name = "crossbeam-utils"
+version = "0.8.19"
+
+[[patch.unused]]
+name = "miniz_oxide"
+version = "0.7.2"
+
+[[patch.unused]]
+name = "regex"
+version = "1.8.4"
